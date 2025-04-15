@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lírica Animada</title>
+    <title>Lírica Animada al Clic</title>
     <style>
         body {
             font-family: sans-serif;
@@ -21,15 +21,21 @@
         }
 
         .linea-lirik {
-            white-space: nowrap; /* Evita el salto de línea automático */
-            overflow: hidden; /* Oculta los caracteres que aún no se han mostrado */
+            white-space: nowrap;
+            overflow: hidden;
             margin-bottom: 10px;
             font-size: 1.2em;
+            cursor: pointer;
         }
 
         .caracter-animado {
-            display: inline-block; /* Permite establecer márgenes y paddings */
-            opacity: 0; /* Inicialmente invisible */
+            display: inline-block;
+            opacity: 0;
+        }
+
+        .linea-lirik.animado .caracter-animado {
+            opacity: 1;
+            transition: opacity 0.2s ease-in-out; /* Ajusta la velocidad de aparición */
         }
     </style>
 </head>
@@ -69,36 +75,27 @@
     <script>
         const lineas = document.querySelectorAll('.linea-lirik');
 
-        function animateText(linea) {
+        function prepararLinea(linea) {
             const texto = linea.textContent;
-            const delayLinea = parseInt(linea.dataset.delayLine);
-            const delayChar = parseInt(linea.dataset.delayChar);
-            linea.textContent = ''; // Limpiar el texto original
-
-            texto.split('').forEach((caracter, index) => {
+            linea.textContent = '';
+            texto.split('').forEach(caracter => {
                 const span = document.createElement('span');
-                span.textContent = caracter;
+                span.textContent = caracter === ' ' ? '\u00A0' : caracter; // Usar &nbsp; para espacios
                 span.classList.add('caracter-animado');
                 linea.appendChild(span);
-                setTimeout(() => {
-                    span.style.opacity = 1;
-                }, index * delayChar);
             });
-
-            return delayLinea; // Devolver el delay de la línea para la siguiente animación
         }
 
-        async function iniciarAnimacion() {
-            let totalDelay = 0;
-            for (const linea of lineas) {
-                // Esperar el delay acumulado antes de iniciar la animación de la línea
-                await new Promise(resolve => setTimeout(resolve, totalDelay));
-                const lineaDelay = animateText(linea);
-                totalDelay += lineaDelay;
-            }
+        function animarLinea(linea) {
+            linea.classList.add('animado');
         }
 
-        window.onload = iniciarAnimacion;
+        lineas.forEach(linea => {
+            prepararLinea(linea);
+            linea.addEventListener('click', () => {
+                animarLinea(linea);
+            });
+        });
     </script>
 </body>
 </html>
