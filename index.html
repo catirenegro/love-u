@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lírica Animada</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        #letras-container {
+            text-align: center;
+        }
+
+        .linea-lirik {
+            white-space: nowrap; /* Evita el salto de línea automático */
+            overflow: hidden; /* Oculta los caracteres que aún no se han mostrado */
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .caracter-animado {
+            display: inline-block; /* Permite establecer márgenes y paddings */
+            opacity: 0; /* Inicialmente invisible */
+        }
+    </style>
+</head>
+<body>
+    <div id="letras-container">
+        <div class="linea-lirik" data-delay-line="700" data-delay-char="40">Your morning eyes, I could stare like watching stars</div>
+        <div class="linea-lirik" data-delay-line="500" data-delay-char="50">I could walk you by, and I'll tell without a thought</div>
+        <div class="linea-lirik" data-delay-line="600" data-delay-char="30">You'd be mine, would you mind if I took your hand tonight?</div>
+        <div class="linea-lirik" data-delay-line="400" data-delay-char="60">Know you're all that I want this life</div>
+        <div class="linea-lirik" data-delay-line="300" data-delay-char="0"></div>
+        <div class="linea-lirik" data-delay-line="500" data-delay-char="70"></div>
+        <div class="linea-lirik" data-delay-line="700" data-delay-char="40">I'll imagine we fell in love</div>
+        <div class="linea-lirik" data-delay-line="600" data-delay-char="35">I'll nap under moonlight skies with you</div>
+        <div class="linea-lirik" data-delay-line="500" data-delay-char="45">I think I'll picture us, you with the waves</div>
+        <div class="linea-lirik" data-delay-line="400" data-delay-char="50">The ocean's colors on your face</div>
+        <div class="linea-lirik" data-delay-line="500" data-delay-char="40">I'll leave my heart with your air</div>
+        <div class="linea-lirik" data-delay-line="600" data-delay-char="30">So let me fly with you</div>
+        <div class="linea-lirik" data-delay-line="700" data-delay-char="50">Will you be forever with me?</div>
+        <div class="linea-lirik" data-delay-line="300" data-delay-char="0"></div>
+        <div class="linea-lirik" data-delay-line="500" data-delay-char="60"></div>
+        <div class="linea-lirik" data-delay-line="700" data-delay-char="35">My love will always stay by you</div>
+        <div class="linea-lirik" data-delay-line="500" data-delay-char="40">I'll keep it safe, so don't you worry a thing</div>
+        <div class="linea-lirik" data-delay-line="600" data-delay-char="30">I'll tell you I love you more</div>
+        <div class="linea-lirik" data-delay-line="500" data-delay-char="45">It's stuck with you forever, so promise you won't let it go</div>
+        <div class="linea-lirik" data-delay-line="700" data-delay-char="50">I'll trust the universe will always bring me to you</div>
+        <div class="linea-lirik" data-delay-line="300" data-delay-char="0"></div>
+        <div class="linea-lirik" data-delay-line="500" data-delay-char="40"></div>
+        <div class="linea-lirik" data-delay-line="700" data-delay-char="35">I'll imagine we fell in love</div>
+        <div class="linea-lirik" data-delay-line="600" data-delay-char="30">I'll nap under moonlight skies with you</div>
+        <div class="linea-lirik" data-delay-line="500" data-delay-char="45">I think I'll picture us, you with the waves</div>
+        <div class="linea-lirik" data-delay-line="400" data-delay-char="50">The ocean's colors on your face</div>
+        <div class="linea-lirik" data-delay-line="500" data-delay-char="40">I'll leave my heart with your air</div>
+        <div class="linea-lirik" data-delay-line="600" data-delay-char="30">So let me fly with you</div>
+        <div class="linea-lirik" data-delay-line="700" data-delay-char="50">Will you be forever with me?</div>
+    </div>
+
+    <script>
+        const lineas = document.querySelectorAll('.linea-lirik');
+
+        function animateText(linea) {
+            const texto = linea.textContent;
+            const delayLinea = parseInt(linea.dataset.delayLine);
+            const delayChar = parseInt(linea.dataset.delayChar);
+            linea.textContent = ''; // Limpiar el texto original
+
+            texto.split('').forEach((caracter, index) => {
+                const span = document.createElement('span');
+                span.textContent = caracter;
+                span.classList.add('caracter-animado');
+                linea.appendChild(span);
+                setTimeout(() => {
+                    span.style.opacity = 1;
+                }, index * delayChar);
+            });
+
+            return delayLinea; // Devolver el delay de la línea para la siguiente animación
+        }
+
+        async function iniciarAnimacion() {
+            let totalDelay = 0;
+            for (const linea of lineas) {
+                // Esperar el delay acumulado antes de iniciar la animación de la línea
+                await new Promise(resolve => setTimeout(resolve, totalDelay));
+                const lineaDelay = animateText(linea);
+                totalDelay += lineaDelay;
+            }
+        }
+
+        window.onload = iniciarAnimacion;
+    </script>
+</body>
+</html>
